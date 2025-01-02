@@ -5,7 +5,7 @@ import './style.css';
 // Scene setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
@@ -116,9 +116,9 @@ let time = 0;
 const infoElement = document.createElement('div');
 infoElement.id = 'info';
 infoElement.innerHTML = `
-    Use mouse to rotate view<br>
-    Scroll to zoom in/out<br>
-    Pink dot = Japan
+    マウスでカメラを回転させてね<br>
+    スコールでズーム！<br>
+    ピンク色のマーカーが日本だよ！<br>
 `;
 document.body.appendChild(infoElement);
 
