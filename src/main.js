@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import GUI from 'lil-gui';
 import './style.css';
+
+// Debug
+const gui = new GUI();
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -89,6 +93,20 @@ scene.add(sunLight);
 // Add helper for sun light shadow camera
 // const sunLightHelper = new THREE.CameraHelper(sunLight.shadow.camera);
 // scene.add(sunLightHelper);
+
+//gui.add(floor.material, 'displacementScale').min(0).max(1).step(0.001).name('floorDisplacementScale')
+const lightFolder = gui.addFolder('太陽の光');
+
+lightFolder.add(sunLight, 'intensity', 0, 5, 0.1).name('強さ');
+lightFolder.addColor(sunLight, 'color').name('色');
+
+// Shadow properties
+// const shadowFolder = lightFolder.addFolder('Shadow');
+// shadowFolder.add(sunLight.shadow.camera, 'near', 0.1, 100).name('Near').onChange(() => sunLight.shadow.camera.updateProjectionMatrix());
+// shadowFolder.add(sunLight.shadow.camera, 'far', 0.1, 100).name('Far').onChange(() => sunLight.shadow.camera.updateProjectionMatrix());
+// shadowFolder.add(sunLight.shadow.mapSize, 'width', 128, 2048, 128).name('Shadow Width');
+// shadowFolder.add(sunLight.shadow.mapSize, 'height', 128, 2048, 128).name('Shadow Height');
+
 
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0x404040, 0.2);
