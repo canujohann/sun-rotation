@@ -91,26 +91,44 @@ sunLight.castShadow = true;
 scene.add(sunLight);
 
 // Add helper for sun light shadow camera
-// const sunLightHelper = new THREE.CameraHelper(sunLight.shadow.camera);
-// scene.add(sunLightHelper);
+const sunLightHelper = new THREE.CameraHelper(sunLight.shadow.camera);
+sunLightHelper.visible = false;
+scene.add(sunLightHelper);
 
-//gui.add(floor.material, 'displacementScale').min(0).max(1).step(0.001).name('floorDisplacementScale')
+
 const lightFolder = gui.addFolder('太陽の光');
+lightFolder.close();
 
 lightFolder.add(sunLight, 'intensity', 0, 5, 0.1).name('強さ');
 lightFolder.addColor(sunLight, 'color').name('色');
 
-// Shadow properties
-// const shadowFolder = lightFolder.addFolder('Shadow');
-// shadowFolder.add(sunLight.shadow.camera, 'near', 0.1, 100).name('Near').onChange(() => sunLight.shadow.camera.updateProjectionMatrix());
-// shadowFolder.add(sunLight.shadow.camera, 'far', 0.1, 100).name('Far').onChange(() => sunLight.shadow.camera.updateProjectionMatrix());
-// shadowFolder.add(sunLight.shadow.mapSize, 'width', 128, 2048, 128).name('Shadow Width');
-// shadowFolder.add(sunLight.shadow.mapSize, 'height', 128, 2048, 128).name('Shadow Height');
+// Create an object to hold the helper visibility state
+const helperState = {
+    visible: false
+};
 
+// Add helper visibility toggle
+lightFolder.add(helperState, 'visible')
+    .name('角度表示')
+    .onChange((value) => {
+        sunLightHelper.visible = value;
+    });
+
+// // Add shadow camera controls
+// const cameraFolder = lightFolder.addFolder('Shadow Camera');
+// cameraFolder.add(sunLight.shadow.camera, 'left', -100, 0).onChange(() => sunLightHelper.update());
+// cameraFolder.add(sunLight.shadow.camera, 'right', 0, 100).onChange(() => sunLightHelper.update());
+// cameraFolder.add(sunLight.shadow.camera, 'top', 0, 100).onChange(() => sunLightHelper.update());
+// cameraFolder.add(sunLight.shadow.camera, 'bottom', -100, 0).onChange(() => sunLightHelper.update());
 
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0x404040, 0.2);
 scene.add(ambientLight);
+
+// Ambient light GUI
+const ambientLightFolder = gui.addFolder("全体照明");
+//ambientLightFolder.addColor(ambientLight, 'color').name('色');
+ambientLightFolder.add(ambientLight, 'intensity', 0, 10, 0.1).name('強さ');
 
 // Add orbit visualizers
 const earthOrbitGeometry = new THREE.RingGeometry(19.5, 20.5, 64);
