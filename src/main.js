@@ -86,6 +86,10 @@ sunLight.position.set(0, 0, 0);
 sunLight.castShadow = true;
 scene.add(sunLight);
 
+// Add helper for sun light shadow camera
+// const sunLightHelper = new THREE.CameraHelper(sunLight.shadow.camera);
+// scene.add(sunLightHelper);
+
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0x404040, 0.2);
 scene.add(ambientLight);
@@ -158,3 +162,5 @@ function onWindowResize() {
 }
 
 animate();
+
+
