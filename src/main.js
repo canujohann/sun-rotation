@@ -16,6 +16,38 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
+/**
+ * Textures loading
+ */
+const textureLoader = new THREE.TextureLoader();
+
+// Earth
+const earthColorTexture = textureLoader.load('./textures/earth/rocky_terrain_02_diff_1k.jpg');
+const earthARMTexture = textureLoader.load('./textures/earth/rocky_terrain_02_arm_1k.jpg');
+const earthNormalTexture = textureLoader.load('./textures/earth/rocky_terrain_02_nor_gl_1k.jpg');
+earthColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+// earthColorTexture.repeat.set(1, 1);
+// earthARMTexture.repeat.set(1, 1);
+// earthNormalTexture.repeat.set(1, 1);
+
+// earthColorTexture.wrapS = THREE.RepeatWrapping
+// earthARMTexture.wrapS = THREE.RepeatWrapping
+// earthNormalTexture.wrapS = THREE.RepeatWrapping
+
+// earthColorTexture.wrapT = THREE.RepeatWrapping
+// earthARMTexture.wrapT = THREE.RepeatWrapping
+// earthNormalTexture.wrapT = THREE.RepeatWrapping
+
+
+// Moon
+const moonColorTexture = textureLoader.load('./textures/moon/rock_boulder_dry_diff_1k.jpg');
+const moonARMTexture = textureLoader.load('./textures/moon/rock_boulder_dry_arm_1k.jpg');
+const moonNormalTexture = textureLoader.load('./textures/moon/rocky_terrain_02_nor_gl_1k.jpg');
+earthColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+
+
 // Controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -37,11 +69,21 @@ scene.add(earthGroup);
 
 // Earth
 const earthGeometry = new THREE.SphereGeometry(2, 32, 32);
-const earthMaterial = new THREE.MeshPhongMaterial({ 
-    color: 0x2233ff,
-    shininess: 25,
-    specular: 0x222222
-});
+// const earthMaterial = new THREE.MeshPhongMaterial({ 
+//     color: 0x2233ff,
+//     shininess: 25,
+//     specular: 0x222222
+// });
+
+
+const earthMaterial = new THREE.MeshStandardMaterial({
+    map: earthColorTexture,
+    aoMap: earthARMTexture,
+    roughnessMap: earthARMTexture,
+    metalnessMap: earthARMTexture,
+    normalMap: earthNormalTexture
+})
+
 const earth = new THREE.Mesh(earthGeometry, earthMaterial);
 earthGroup.add(earth);
 earth.castShadow = true;
@@ -71,14 +113,23 @@ const positionJapanMarker = () => {
 };
 
 positionJapanMarker();
-earth.add(japanMarker);  // Add Japan marker as child of Earth
+//earth.add(japanMarker);  // Add Japan marker as child of Earth
 
 // Moon
 const moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-const moonMaterial = new THREE.MeshPhongMaterial({ 
-    color: 0x888888,
-    shininess: 5
-});
+// const moonMaterial = new THREE.MeshPhongMaterial({ 
+//     color: 0x888888,
+//     shininess: 5
+// });
+
+const moonMaterial = new THREE.MeshStandardMaterial({
+    map: moonColorTexture,
+    aoMap: moonARMTexture,
+    roughnessMap: moonARMTexture,
+    metalnessMap: moonARMTexture,
+    normalMap: moonNormalTexture
+})
+
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
 moon.castShadow = true;
 moon.receiveShadow = true;
@@ -132,12 +183,14 @@ ambientLightFolder.add(ambientLight, 'intensity', 0, 10, 0.1).name('強さ');
 
 // Add orbit visualizers
 const earthOrbitGeometry = new THREE.RingGeometry(19.5, 20.5, 64);
+
 const earthOrbitMaterial = new THREE.MeshBasicMaterial({ 
     color: 0x444444, 
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.3
 });
+
 const earthOrbit = new THREE.Mesh(earthOrbitGeometry, earthOrbitMaterial);
 earthOrbit.rotation.x = Math.PI / 2;
 scene.add(earthOrbit);
@@ -158,7 +211,6 @@ infoElement.id = 'info';
 infoElement.innerHTML = `
     マウスでカメラを回転させてね<br>
     スコールでズーム！<br>
-    ピンク色のマーカーが日本だよ！<br>
 `;
 document.body.appendChild(infoElement);
 
